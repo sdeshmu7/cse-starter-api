@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="healthCheck" doc:id="c48024c5-6d8e-4c15-bbdd-8e5e0aba9670" >
+ <ee:transform doc:name="Transform Message" doc:id="021d362c-71f7-4b27-b876-58fb4de52527" >
+
+                     <ee:message >
+
+                           <ee:set-payload ><![CDATA[%dw 2.0
+
+output application/json
+
+---
+
+{
+       source: message.attributes.remoteAddress,
+       timestamp: now(),
+       headers: message.attributes.headers
+}]]></ee:set-payload>
+
+                     </ee:message>
+
+              </ee:transform>
+
+              <logger level="INFO" doc:name="Logger" doc:id="981d0983-4ce8-4e89-8f93-81f3114389a7" message='#[write(message, "application/json") replace "\n" with "\n"]'/>	</flow>
+</mule>
